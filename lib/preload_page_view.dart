@@ -24,6 +24,7 @@ class PreloadPageController extends ScrollController {
     this.initialPage = 0,
     this.keepPage = true,
     this.viewportFraction = 1.0,
+    this.padEnds = true,
   }) : assert(viewportFraction > 0.0);
 
   /// The page to show when first creating the [PreloadPageView].
@@ -64,6 +65,8 @@ class PreloadPageController extends ScrollController {
   ///   * First, based on the attached [PreloadPageView]'s [BuildContext] and the
   ///     position saved at that context's [PageStorage] if [keepPage] is true.
   ///   * Second, from the [PreloadPageController]'s [initialPage].
+  final bool padEnds;
+
   ///
   /// 2. More than one [PreloadPageView] using the same [PreloadPageController].
   ///
@@ -127,10 +130,6 @@ class PreloadPageController extends ScrollController {
   /// The returned [Future] resolves when the animation completes.
   ///
   /// The `duration` and `curve` arguments must not be null.
-  Future<void> previousPage(
-      {required Duration duration, required Curve curve}) {
-    return animateToPage(page!.round() - 1, duration: duration, curve: curve);
-  }
 
   @override
   ScrollPosition createScrollPosition(ScrollPhysics physics,
@@ -626,6 +625,7 @@ class _PreloadPageViewState extends State<PreloadPageView> {
             slivers: <Widget>[
               SliverFillViewport(
                   viewportFraction: widget.controller.viewportFraction,
+                  padEnds: widget.controller.padEnds,
                   delegate: widget.childrenDelegate),
             ],
           );
